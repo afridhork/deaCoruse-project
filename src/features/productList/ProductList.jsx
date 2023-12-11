@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { storeStatic } from './staticProductSlice'
 import StarRating from '../starRating/StarRating'
 import { selectSortingResult } from '../formInput/sortingSlice'
 import Skeleton from 'react-loading-skeleton'
@@ -25,7 +24,6 @@ const ProductList = ({handleOpenModalProduct}) => {
             const response = await fetch('https://fakestoreapi.com/products');
             const data = await response.json();
             setProducts(data)
-            dispatch(storeStatic(data))
             dispatch(storeDynamic(data))
          } catch (error) {
             console.error(error);

@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { getProductsDynamic } from '../productList/dynamicProductSlice'
-import { getProductsStatic } from '../productList/staticProductSlice'
 
 import { selectSortingResult, sorting } from './sortingSlice'
 import { search, selectSearchResult } from './searchSlice'
 import { filter, selectFilterResult } from './filterSlice'
 
-const SearchBar = ({handleSearchKeyExist, isSearchKeyExist}) => {
+const SearchBar = ({handleSearchKeyExist}) => {
   const dispatch = useDispatch()
   const products = useSelector(getProductsDynamic)
   const [result, setResult] = useState([])
@@ -32,28 +31,26 @@ const SearchBar = ({handleSearchKeyExist, isSearchKeyExist}) => {
   }, [products])
 
   const handleSearch = (e) => {
-    if(e.key === 'Enter'){
-      handleSearchKeyExist(e.target.value)
-      if(e.target.value){
-        const sendSearchData = {
-          type: e.target.value,
-          products: result
-        }
-        dispatch(search(sendSearchData))
-      }else if(resultFilter){
-        const sendSearchData = {
-          type: e.target.value,
-          products: resultFilter
-        }
-        dispatch(search(sendSearchData))
-      }else{
-        const sendSearchData = {
-          type: e.target.value,
-          products
-        }
-        dispatch(search(sendSearchData))
-
+    handleSearchKeyExist(e.target.value)
+    let sendSearchData = {}
+    if(e.target.value){
+      sendSearchData = {
+        type: e.target.value,
+        products: result
       }
+      dispatch(search(sendSearchData))
+    }else if(resultFilter.length > 0){
+      sendSearchData = {
+        type: e.target.value,
+        products: resultFilter
+      }
+      dispatch(search(sendSearchData))
+    }else if(e.target.value === ''){
+      sendSearchData = {
+        type: e.target.value,
+        products
+      }
+      dispatch(search(sendSearchData))
     }
   }
 
@@ -63,7 +60,7 @@ const SearchBar = ({handleSearchKeyExist, isSearchKeyExist}) => {
         type="text" 
         placeholder='search product in Simple E-Commerce' 
         className='text-sm w-[290px] sm:w-[415px] md:w-[615px] lg:w-[400px] rounded-lg placeholder:text-sm focus:outline-0 p-1 pl-2 mr-4' 
-        onKeyDown={handleSearch}
+        onChange={handleSearch}
       />
     </div>
   )

@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './../index.css'
 import CartIcon from '../assets/cart.svg'
-import { useSelector } from 'react-redux'
-import { selectCartItemsTotal } from '../features/cart/cartSlice'
-import SearchBar from '../features/formInput/FormInput'
 import FormInput from '../features/formInput/FormInput'
 
 const Header = ({handleOpenModalCart, totalItems}) => {
@@ -16,7 +13,7 @@ const Header = ({handleOpenModalCart, totalItems}) => {
             <div className='relative top-0 mb-8 sm:mb-8 lg:mb-0'>
                <button 
                   type='button'
-                  className='relative rounded-full bg-cyan-800 p-2 text-gray-100'
+                  className='relative rounded-full w-8 h-8 bg-cyan-800 p-2 text-gray-100'
                   onClick={handleOpenModalCart}
                >
                   {
