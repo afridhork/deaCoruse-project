@@ -35,14 +35,12 @@ const SearchBar = ({handleSearchKeyExist, isSearchKeyExist}) => {
     if(e.key === 'Enter'){
       handleSearchKeyExist(e.target.value)
       if(e.target.value){
-        console.log('isSearchKeyExist 1',isSearchKeyExist);
         const sendSearchData = {
           type: e.target.value,
           products: result
         }
         dispatch(search(sendSearchData))
       }else if(resultFilter){
-        console.log('isSearchKeyExist',isSearchKeyExist);
         const sendSearchData = {
           type: e.target.value,
           products: resultFilter
@@ -71,7 +69,7 @@ const SearchBar = ({handleSearchKeyExist, isSearchKeyExist}) => {
   )
 }
 
-const SortingBar = () =>{
+const SortingBar = ({handleSortingValue}) =>{
   const [isClicked, setIsClicked] = useState(null)
   const [result, setResult] = useState([])
   const dispatch = useDispatch()
@@ -97,6 +95,7 @@ const SortingBar = () =>{
   
   const handleSortingChoice = (e) => {
     if(e.target.value){
+      handleSortingValue(e.target.value)
       const sendDataSorting  ={
         type: e.target.value,
         products: result
@@ -120,7 +119,7 @@ const SortingBar = () =>{
   )
 }
 
-const FilterBar = ({isSearchKeyExist}) => {
+const FilterBar = ({isSearchKeyExist, sortingValue}) => {
   const [isClicked, setIsClicked] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [result, setResult] = useState([])
@@ -155,15 +154,30 @@ const FilterBar = ({isSearchKeyExist}) => {
   }, [products])
 
   const handleCategory = (e) => {
-    if(e.target.value){
+    if(e.target.value !== 'all'){
       const selectedValue = e.target.value;
       setSelectedCategory((prev) =>
         prev === selectedValue ? prev : selectedValue
       );
-      console.log('cek result', selectedCategory);
+      const dataProducts = [...products]
+      if(sortingValue === 'asc'){
+        dataProducts.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+      }else if(sortingValue === 'desc'){
+        dataProducts.sort((a,b) => (a.title > b.title) ? -1 : ((b.title > a.title) ? 1 : 0))
+      }else if(sortingValue === 'highest'){
+        dataProducts.sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0))
+      }else if(sortingValue === 'lowest'){
+        dataProducts.sort((a,b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
+      }
       const sendDataCategory = {
         type: selectedValue,
-        products: isSearchKeyExist ? result : products,
+        products: isSearchKeyExist ? result : sortingValue ? dataProducts : products,
+      }
+      dispatch(filter(sendDataCategory))
+    }else{
+      const sendDataCategory = {
+        type: e.target.value,
+        products: products,
       }
       dispatch(filter(sendDataCategory))
     }
@@ -174,7 +188,7 @@ const FilterBar = ({isSearchKeyExist}) => {
         className='text-sm w-[140] sm:w-[205px] md:w-[300px] lg:w-[250px] rounded-lg focus:outline-0 p-1'
         onChange={handleCategory}
       >
-        <option value="" disabled={isClicked ? true : false}>Category</option>
+        <option value="all">All Category</option>
         {
           category.length > 0 && (
             category.map((value,index) => {
@@ -191,16 +205,22 @@ const FilterBar = ({isSearchKeyExist}) => {
 
 const FormInput = () => {
   const [isSearchKeyExist, setIsSearchKeyExist] = useState('')
+  const [sortingValue, setSortingValue] = useState('')
+
   const handleSearchKeyExist = (searchKey) => {
     setIsSearchKeyExist(searchKey)
+  }
+
+  const handleSortingValue = (value) => {
+    setSortingValue(value)
   }
   return(
     <>
       <div className='grid sm:grid lg:flex grid-rows-2 gap-2'>
         <SearchBar handleSearchKeyExist={handleSearchKeyExist} isSearchKeyExist={isSearchKeyExist} />
         <div className='flex'>
-          <SortingBar/>
-          <FilterBar isSearchKeyExist={isSearchKeyExist}/>
+          <SortingBar handleSortingValue={handleSortingValue}/>
+          <FilterBar isSearchKeyExist={isSearchKeyExist} sortingValue={sortingValue}/>
         </div>
       </div>
     </>

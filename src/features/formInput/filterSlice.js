@@ -12,7 +12,7 @@ export const filterSlice = createSlice({
          const newItem = action.payload
          const data = [...newItem.products] 
          const type = newItem.type
-         const newData = []
+         let newData = []
          if(type === "men's clothing"){
             data.find(item => {
                if(item.category === type){
@@ -37,8 +37,9 @@ export const filterSlice = createSlice({
                   newData.push(item)
                }
             })
+         }else{
+            newData = data
          }
-         console.log('redux filter', type, newData);
 
          state.items = newData
       }      

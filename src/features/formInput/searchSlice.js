@@ -15,7 +15,6 @@ export const searchSlice = createSlice({
          let dataFilter = []
          for(let i in data){
             if(type === ''){
-               console.log('cek type search 1', type, data);
                dataFilter = data
             }else{
                if(data[i].title.toUpperCase().indexOf(type.toUpperCase()) !== -1){
@@ -23,7 +22,6 @@ export const searchSlice = createSlice({
                }
             }
          }
-         console.log('cek type search', dataFilter);
          state.items = dataFilter
       }
       
