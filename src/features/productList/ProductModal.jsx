@@ -3,16 +3,7 @@ import Modal from "../../components/Modal";
 import CloseBtn from '../../assets/close.svg'
 import { addItemToCart } from "../cart/cartSlice";
 import { useState } from "react";
-// import {
-//   selectCartItems,
-//   selectCartItemsTotal,
-//   selectCartTotalPrices,
-// } from "./cartSlice";
-
 const ProductModal = ({ handleHideModalProduct, dataProduct }) => {
-//   const cartItems = useSelector(selectCartItems);
-//   const totalItems = useSelector(selectCartItemsTotal);
-//   const totalPrice = useSelector(selectCartTotalPrices);
 const [product, setProduct] = useState(dataProduct)
 const dispatch = useDispatch()
 
