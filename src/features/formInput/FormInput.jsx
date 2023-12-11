@@ -175,9 +175,19 @@ const FilterBar = ({isSearchKeyExist, sortingValue}) => {
       }
       dispatch(filter(sendDataCategory))
     }else{
+      const dataProducts = [...products]
+      if(sortingValue === 'asc'){
+        dataProducts.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
+      }else if(sortingValue === 'desc'){
+        dataProducts.sort((a,b) => (a.title > b.title) ? -1 : ((b.title > a.title) ? 1 : 0))
+      }else if(sortingValue === 'highest'){
+        dataProducts.sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0))
+      }else if(sortingValue === 'lowest'){
+        dataProducts.sort((a,b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0))
+      }
       const sendDataCategory = {
         type: e.target.value,
-        products: products,
+        products: sortingValue ? dataProducts : products,
       }
       dispatch(filter(sendDataCategory))
     }
