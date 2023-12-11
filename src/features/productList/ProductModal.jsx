@@ -8,11 +8,11 @@ const [product, setProduct] = useState(dataProduct)
 const dispatch = useDispatch()
 
   const handleCheckoutToWhatsapp = () => {
-    if (totalItems === 0) return;
+    if (product.quantity === 0) return;
 
     const phoneNumber = "6281285241889";
     const message = encodeURIComponent(
-      `Halo, saya ingin membeli ${totalItems} barang dengan total harga ${totalPrice}`
+      `Halo, saya ingin membeli ${product.quantity} barang dengan total harga ${product.totalPrice}`
     );
 
     const URL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${message}`;
