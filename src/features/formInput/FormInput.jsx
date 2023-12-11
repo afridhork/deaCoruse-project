@@ -7,7 +7,7 @@ import { selectSortingResult, sorting } from './sortingSlice'
 import { search, selectSearchResult } from './searchSlice'
 import { filter, selectFilterResult } from './filterSlice'
 
-const SearchBar = ({handleSearchKeyExist}) => {
+const SearchBar = ({handleSearchKeyExist, filterValue}) => {
   const dispatch = useDispatch()
   const products = useSelector(getProductsDynamic)
   const [result, setResult] = useState([])
@@ -19,6 +19,40 @@ const SearchBar = ({handleSearchKeyExist}) => {
     if(filterResult.length > 0 ){
       setResult(filterResult)
       setResultFilter(filterResult)
+    }
+    if(filterResult.length === 0 && resultFilter.length > 0){
+      const newProducts = [...products]
+      const type = filterValue
+      let newData = []
+      if(type === "men's clothing"){
+        newProducts.find(item => {
+          if(item.category === type){
+            newData.push(item)
+          }
+        })
+      }else if(type === "jewelery"){
+          newProducts.find(item => {
+              if(item.category === type){
+                newData.push(item)
+              }
+          })
+        }else if(type === "electronics"){
+          newProducts.find(item => {
+              if(item.category === type){
+                newData.push(item)
+              }
+          })
+        }else if(type === "women's clothing"){
+          newProducts.find(item => {
+              if(item.category === type){
+                newData.push(item)
+              }
+          })
+        }else{
+          newData = data
+        }
+        setResult(newData)
+        setResultFilter(newData)
     }
   }, [filterResult])
 
@@ -116,7 +150,7 @@ const SortingBar = ({handleSortingValue}) =>{
   )
 }
 
-const FilterBar = ({isSearchKeyExist, sortingValue}) => {
+const FilterBar = ({ handleFilterValue, isSearchKeyExist, sortingValue}) => {
   const [isClicked, setIsClicked] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [result, setResult] = useState([])
@@ -151,6 +185,7 @@ const FilterBar = ({isSearchKeyExist, sortingValue}) => {
   }, [products])
 
   const handleCategory = (e) => {
+    handleFilterValue(e.target.value)
     if(e.target.value !== 'all'){
       const selectedValue = e.target.value;
       setSelectedCategory((prev) =>
@@ -213,6 +248,7 @@ const FilterBar = ({isSearchKeyExist, sortingValue}) => {
 const FormInput = () => {
   const [isSearchKeyExist, setIsSearchKeyExist] = useState('')
   const [sortingValue, setSortingValue] = useState('')
+  const [filterValue, setFilterValue] = useState('')
 
   const handleSearchKeyExist = (searchKey) => {
     setIsSearchKeyExist(searchKey)
@@ -221,13 +257,17 @@ const FormInput = () => {
   const handleSortingValue = (value) => {
     setSortingValue(value)
   }
+
+  const handleFilterValue = (value) => {
+    setFilterValue(value)
+  }
   return(
     <>
       <div className='grid sm:grid lg:flex grid-rows-2 gap-2'>
-        <SearchBar handleSearchKeyExist={handleSearchKeyExist} isSearchKeyExist={isSearchKeyExist} />
+        <SearchBar handleSearchKeyExist={handleSearchKeyExist} filterValue={filterValue} isSearchKeyExist={isSearchKeyExist} />
         <div className='flex'>
           <SortingBar handleSortingValue={handleSortingValue}/>
-          <FilterBar isSearchKeyExist={isSearchKeyExist} sortingValue={sortingValue}/>
+          <FilterBar handleFilterValue={handleFilterValue} isSearchKeyExist={isSearchKeyExist} sortingValue={sortingValue}/>
         </div>
       </div>
     </>
