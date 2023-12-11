@@ -3,7 +3,6 @@ import Modal from "../../components/Modal";
 import {
   removeItemFromCart,
   selectCartItems,
-  selectCartItemsTotal,
   selectCartTotalPrices,
 } from "./cartSlice";
 import { useEffect, useState } from "react";
